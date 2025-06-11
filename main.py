@@ -5,7 +5,7 @@ from google.cloud import pubsub_v1
 
 app = Flask(__name__)
 publisher = pubsub_v1.PublisherClient()
-topic_path = publisher.topic_path("integral-hold-462207-u2", "file-metadata-top")
+topic_path = publisher.topic_path("integral-hold-462207-u2", "extraction-topic")
 
 @app.route("/", methods=["POST"])
 def handle_event():
