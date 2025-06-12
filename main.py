@@ -12,16 +12,18 @@ topic_path = publisher.topic_path(PROJECT_ID, TOPIC_NAME)
 def handle_event():
     event_data = request.get_json()
 
-    if not event_data or not event_data.get("data"):
-        return "Invalid event", 400
+    if not event_data or not event_data.get("name"):
+        print("Invalid event received:", event_data)
+        return "Invalid GCS event", 400
 
-    attributes = event_data["data"]
-    name = attributes.get("name", "unknown")
-    size = attributes.get("size", "unknown")
-    content_type = attributes.get("contentType", "unknown")
+    # Extract metadata directly from GCS event payload
+    name = event_data.get("name", "unknown")
+    size = event_data.get("size", "unknown")
+    content_type = event_data.get("contentType", "unknown")
 
     message = f"Name: {name}, Size: {size}, Format: {content_type}"
     print("Publishing message:", message)
-    publisher.publish(topic_path, message.encode("utf-8"))
 
+    publisher.publish(topic_path, message.encode("utf-8"))
     return "OK", 200
+
